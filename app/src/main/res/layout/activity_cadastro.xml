@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        android:orientation="vertical" >
+
+        <EditText
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome"
+            android:singleLine="true"
+            android:layout_marginTop="40dp"
+            android:textColorHint="#000080"
+            android:background="@drawable/barra_de_texto"
+            android:id="@+id/edtNomePessoa"/>
+
+        <LinearLayout android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tipo"
+                android:layout_marginTop="40dp"
+                android:textColorHint="#000080"
+                android:id="@+id/txtTipo"
+                />
+
+            <Spinner
+
+                android:id="@+id/planets_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:layout_toRightOf="@id/txtTipo"/>
+        </LinearLayout>
+
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtNomePessoa"
+            android:singleLine="true"
+            android:textColorHint="#000080"
+            android:background="@drawable/barra_de_texto"
+            android:id="@+id/edtLoginCadastro"
+            android:layout_marginTop="20dp"
+            android:hint="Login"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtNomePessoa"
+            android:singleLine="true"
+            android:textColorHint="#000080"
+            android:background="@drawable/barra_de_texto"
+            android:id="@+id/edtEmail"
+            android:layout_marginTop="20dp"
+            android:hint="Email"/>
+
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:password="true"
+            android:layout_height="wrap_content"
+            android:textColorHint="#000080"
+            android:id="@+id/edtSenhaCadastro"
+            android:singleLine="true"
+            android:background="@drawable/barra_de_texto"
+            android:layout_below="@id/edtLoginCadastro"
+            android:layout_marginTop="20dp"
+            android:hint="Senha"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:password="true"
+            android:layout_height="wrap_content"
+            android:textColorHint="#000080"
+            android:id="@+id/edtConfirmarSenhaCadastro"
+            android:background="@drawable/barra_de_texto"
+            android:singleLine="true"
+            android:layout_below="@id/edtSenhaCadastro"
+            android:layout_marginTop="20dp"
+            android:hint="Repita a senha"/>
+
+
+
+
+        <Button
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Cadastrar"
+            android:background="@drawable/botao"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:textColorHint="#000080"
+            android:id="@+id/btnCadastrarCadastro"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>
