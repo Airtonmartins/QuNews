@@ -1,7 +1,6 @@
 package com.qunews.psd.rsi.qunews.gui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,10 +20,11 @@ import com.qunews.psd.rsi.qunews.ClientAPI.QunewsAPI;
 import com.qunews.psd.rsi.qunews.R;
 import com.qunews.psd.rsi.qunews.dominio.Pessoa;
 import com.qunews.psd.rsi.qunews.dominio.Pessoamac;
+import com.qunews.psd.rsi.qunews.dominio.Tipo;
 import com.qunews.psd.rsi.qunews.dominio.Usuario;
-import com.qunews.psd.rsi.qunews.util.UsuarioDes;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -45,20 +44,16 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText editUsuarioSenhaConfirmar;
     private EditText editEmail;
     private Button btnCadastrar;
-    private String[] spinnerTipo = new String[]{"Aluno","Funcionario","Professor"};
     private Spinner sp;
-    private Integer tipo;
+    private Integer tipoid;
+    ConnectiontoAPI connectiontoAPI = new ConnectiontoAPI();
+    QunewsAPI qunewAPI = connectiontoAPI.CreateRetrofit();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
         contexto = this;
-
-
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, spinnerTipo);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         sp = (Spinner) findViewById(R.id.planets_spinner);
         editPessoaNome = (EditText) findViewById(R.id.edtNomePessoa);
@@ -67,15 +62,17 @@ public class CadastroActivity extends AppCompatActivity {
         editUsuarioSenhaConfirmar = (EditText) findViewById(R.id.edtConfirmarSenhaCadastro);
         editEmail = (EditText) findViewById(R.id.edtEmail);
         btnCadastrar = (Button) findViewById(R.id.btnCadastrarCadastro);
-        sp.setAdapter(adapter);
+        retornaTipos();
 
         sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                Log.i("LOG",String.valueOf(position));
-                Log.i("LOG", (String) sp.getSelectedItem());
-                tipo = position;
+                Tipo tipo = (Tipo) sp.getSelectedItem();
+
+                Log.i("LOG", sp.getSelectedItem().toString());
+                tipoid = tipo.getId();
+                Log.i("LOG",String.valueOf(tipo.getId()));
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -101,14 +98,9 @@ public class CadastroActivity extends AppCompatActivity {
 
                 if(senha.equals(senhaConfirmar)){
 
-                    Pessoa pessoa = new Pessoa(tipo);
+                    Pessoa pessoa = new Pessoa(tipoid);
                     Pessoamac pessoamac = new Pessoamac(mac);
                     Usuario usuario =new Usuario(login,senha,email,pessoa,pessoamac);
-
-                    Gson gson = new GsonBuilder().registerTypeAdapter(Usuario.class, new UsuarioDes()).create();
-                    ConnectiontoAPI connectiontoAPI = new ConnectiontoAPI();
-                    QunewsAPI qunewAPI = connectiontoAPI.CreateRetrofit(gson);
-
                     Call<Usuario> call = qunewAPI.saveUsuario(usuario);
                     call.enqueue(new Callback<Usuario>() {
                         @Override
@@ -155,6 +147,27 @@ public class CadastroActivity extends AppCompatActivity {
 
 
     }
+
+    public void retornaTipos(){
+
+        Call<List<Tipo>> call = qunewAPI.getTipo("tipo");
+        call.enqueue(new Callback<List<Tipo>>() {
+            @Override
+            public void onResponse(Response<List<Tipo>> response, Retrofit retrofit) {
+                List<Tipo> n = response.body();
+                ArrayAdapter<Tipo> adapter = new ArrayAdapter<Tipo>(contexto, android.R.layout.simple_dropdown_item_1line, n);
+                adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                sp.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.i("R", "Error GET LUXURY CAR: "+t.getMessage());
+            }
+        });
+    }
+
+
 
 
 
