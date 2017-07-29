@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img"
+            android:layout_marginTop="20dp"
+            android:textColorHint="#000080"
+            android:id="@+id/edtLogin"
+            android:singleLine="true"
+            android:hint="Login"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:id="@+id/edtSenha"
+            android:singleLine="true"
+            android:hint="Senha"
+            android:textColorHint="#000080"
+            android:layout_below="@+id/edtLogin"
+            android:inputType="textPassword"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edtSenha"
+            android:text="Logar"
+            android:textColor="#000080"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/botao"
+            android:id="@+id/btnLogar" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cadastrar"
+            android:textColor="#000080"
+            android:layout_marginTop="10dp"
+            android:id="@+id/btnCadastrar"
+            android:layout_below="@+id/btnLogar"
+            android:background="@drawable/botao"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

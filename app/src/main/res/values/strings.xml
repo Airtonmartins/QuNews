@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">QuNews</string>
+    <string name="cadastro">Cadastro</string>
+    <string name="feed">Feed</string>
 </resources>

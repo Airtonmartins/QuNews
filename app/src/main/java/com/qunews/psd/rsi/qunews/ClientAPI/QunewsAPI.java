@@ -7,6 +7,8 @@ import java.util.List;
 
 import retrofit.Call;
 import retrofit.http.Body;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
@@ -22,5 +24,11 @@ public interface QunewsAPI {
 
     @POST("api-register/")
     Call<Usuario> saveUsuario(@Body Usuario usuario);
+
+    @FormUrlEncoded
+    @POST("login/")
+    Call<Usuario> login(@Field("username") String username,
+                                            @Field("password") String password,
+                                            @Field("mac") String mac);
 
 }

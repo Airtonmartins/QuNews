@@ -22,6 +22,7 @@ import com.qunews.psd.rsi.qunews.dominio.Pessoa;
 import com.qunews.psd.rsi.qunews.dominio.Pessoamac;
 import com.qunews.psd.rsi.qunews.dominio.Tipo;
 import com.qunews.psd.rsi.qunews.dominio.Usuario;
+import com.qunews.psd.rsi.qunews.util.Util;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,6 +49,7 @@ public class CadastroActivity extends AppCompatActivity {
     private Integer tipoid;
     ConnectiontoAPI connectiontoAPI = new ConnectiontoAPI();
     QunewsAPI qunewAPI = connectiontoAPI.CreateRetrofit();
+    Util util = new Util();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,9 +93,7 @@ public class CadastroActivity extends AppCompatActivity {
                 String senha = editUsuarioSenha.getText().toString().trim();
                 String senhaConfirmar = editUsuarioSenhaConfirmar.getText().toString().trim();
                 String email = editEmail.getText().toString().trim();
-                WifiManager manager = (WifiManager) contexto.getSystemService(Context.WIFI_SERVICE);
-                WifiInfo info = manager.getConnectionInfo();
-                String mac = info.getMacAddress();
+                String mac = util.pegarMac(contexto);
                 Log.i("MAC", mac);
 
                 if(senha.equals(senhaConfirmar)){
@@ -109,8 +109,10 @@ public class CadastroActivity extends AppCompatActivity {
                             Usuario n = response.body();
 
                             if( n != null ){
-
+                                Gson gson = new GsonBuilder().create();
                                 Log.i("TAG", "Username: "+n.getUsername());
+                                String t = response.body().toString();
+                                finish();
 
                             }
                             else{

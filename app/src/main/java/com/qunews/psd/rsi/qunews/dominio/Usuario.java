@@ -12,6 +12,7 @@ public class Usuario {
     private Pessoa pessoa;
     private Pessoamac pessoamac;
     private String token;
+    private String mac;
 
 
     public Usuario(){}
@@ -58,5 +59,12 @@ public class Usuario {
 
     public void setPessoamac(Pessoamac pessoamac){
         this.pessoamac = pessoamac;
+    }
+
+    public String getToken(){
+        return token;
+    }
+    public void setToken(String token){
+        this.token = token;
     }
 }
