@@ -1,5 +1,6 @@
 package com.qunews.psd.rsi.qunews.ClientAPI;
 
+import com.qunews.psd.rsi.qunews.dominio.Noticia;
 import com.qunews.psd.rsi.qunews.dominio.Tipo;
 import com.qunews.psd.rsi.qunews.dominio.Usuario;
 
@@ -21,6 +22,11 @@ public interface QunewsAPI {
 
     @GET("{ctrlCar}")
     Call<List<Tipo>> getTipo(@Path("ctrlCar") String ctrl);
+
+    @GET("{ctrlCar}")
+    Call<List<Noticia>> getNoticia(@Path("ctrlCar") String ctrl);
+
+
 
     @POST("api-register/")
     Call<Usuario> saveUsuario(@Body Usuario usuario);
