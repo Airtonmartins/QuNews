@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -66,50 +67,40 @@ public class LoginActivity extends AppCompatActivity {
                 String login = editTextLogin.getText().toString().trim();
                 String senha = editTextSenha.getText().toString().trim();
                 String mac = util.pegarMac(contexto);
+                if (validarCampos(login, senha)) {
+                    Call<Usuario> call = qunewAPI.login(login, senha, mac);
+                    call.enqueue(new Callback<Usuario>() {
+                        @Override
+                        public void onResponse(Response<Usuario> response, Retrofit retrofit) {
 
-                Call<Usuario> call = qunewAPI.login(login,senha,"8888888");
-                call.enqueue(new Callback<Usuario>() {
-                    @Override
-                    public void onResponse(Response<Usuario> response, Retrofit retrofit) {
+                            Usuario usuario = response.body();
 
-                        Usuario usuario = response.body();
+                            if (response.isSuccess()) {
+                                Sessao sessao = Sessao.getInstancia();
+                                sessao.setUsuarioLogado(usuario);
+                                Intent intentGoMain = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intentGoMain);
+                                Toast.makeText(LoginActivity.this, "Bem vindo "+usuario.getUsername(), Toast.LENGTH_SHORT).show();
+                                finish();
 
-                        if( usuario != null ){
-                            Log.i("TAG", "Username: "+usuario.getUsername());
-                            Log.i("TAG", "Username: "+usuario.getToken());
-                            Sessao sessao = Sessao.getInstancia();
-                            sessao.setUsuarioLogado(usuario);
-                            Intent intentGoMain = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intentGoMain);
-                            finish();
+                            } else {
 
-                        }
-                        else{
-                            Gson gson = new GsonBuilder().create();
-                            Usuario suer = new Usuario();
-
-                            String json = null;
-                            try {
-                                json = response.errorBody().string();
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                                editTextLogin.setError("");
+                                editTextSenha.setError("");
+                                Toast.makeText(LoginActivity.this, "Usuario ou senha invalida", Toast.LENGTH_SHORT).show();
                             }
 
-
-                            Log.i("TAG", "R: Error Login: "+json);
-
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Throwable t) {
+                            Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void onFailure(Throwable t) {
-                        Log.i("LOG", "Error Connection: " + t.getMessage());
-                    }
-                });
+                        }
+                    });
 
-            }
-        });
+                }
+            }});
 
 
 
@@ -124,4 +115,20 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    public boolean validarCampos(String login, String senha){
+        String msg = "Campo vazio";
+        boolean result = true;
+        if(login.equals("")){
+            editTextLogin.setError(msg);
+            result = false;
+        }
+        if(senha.equals("")){
+            editTextSenha.setError(msg);
+            result = false;
+        }
+
+        return result;
+    }
+
 }

@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,7 +40,6 @@ import retrofit.Retrofit;
 public class CadastroActivity extends AppCompatActivity {
 
     private static Context contexto;
-    private EditText editPessoaNome;
     private EditText editUsuarioLogin;
     private EditText editUsuarioSenha;
     private EditText editUsuarioSenhaConfirmar;
@@ -58,7 +58,6 @@ public class CadastroActivity extends AppCompatActivity {
         contexto = this;
 
         sp = (Spinner) findViewById(R.id.planets_spinner);
-        editPessoaNome = (EditText) findViewById(R.id.edtNomePessoa);
         editUsuarioLogin= (EditText) findViewById(R.id.edtLoginCadastro);
         editUsuarioSenha = (EditText) findViewById(R.id.edtSenhaCadastro);
         editUsuarioSenhaConfirmar = (EditText) findViewById(R.id.edtConfirmarSenhaCadastro);
@@ -71,10 +70,8 @@ public class CadastroActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 Tipo tipo = (Tipo) sp.getSelectedItem();
-
-                Log.i("LOG", sp.getSelectedItem().toString());
                 tipoid = tipo.getId();
-                Log.i("LOG",String.valueOf(tipo.getId()));
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -88,19 +85,19 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String nome = editPessoaNome.getText().toString().trim();
+
                 String login = editUsuarioLogin.getText().toString().trim();
                 String senha = editUsuarioSenha.getText().toString().trim();
                 String senhaConfirmar = editUsuarioSenhaConfirmar.getText().toString().trim();
                 String email = editEmail.getText().toString().trim();
                 String mac = util.pegarMac(contexto);
-                Log.i("MAC", mac);
 
-                if(senha.equals(senhaConfirmar)){
 
                     Pessoa pessoa = new Pessoa(tipoid);
                     Pessoamac pessoamac = new Pessoamac(mac);
                     Usuario usuario =new Usuario(login,senha,email,pessoa,pessoamac);
+
+                    if(validarCampos(usuario,senhaConfirmar)){
                     Call<Usuario> call = qunewAPI.saveUsuario(usuario);
                     call.enqueue(new Callback<Usuario>() {
                         @Override
@@ -108,27 +105,27 @@ public class CadastroActivity extends AppCompatActivity {
 
                             Usuario n = response.body();
 
-                            if( n != null ){
+                            if(response.isSuccess()){
                                 Gson gson = new GsonBuilder().create();
-                                Log.i("TAG", "Username: "+n.getUsername());
                                 String t = response.body().toString();
                                 finish();
 
                             }
-                            else{
+                            else {
                                 Gson gson = new GsonBuilder().create();
                                 Usuario suer = new Usuario();
-
                                 String json = null;
                                 try {
                                     json = response.errorBody().string();
                                 } catch (IOException e) {
                                     e.printStackTrace();
+                                    Toast.makeText(CadastroActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
+
                                 json = json.replace("[","").replace("]","");
                                 suer = gson.fromJson(json, Usuario.class);
+                                validarAPI(suer);
 
-                                Log.i("TAG", "R: Error Usuario: "+suer.getUsername());
 
 
                             }
@@ -138,7 +135,7 @@ public class CadastroActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Throwable t) {
-                            Log.i("LOG", "Error Usuario: " + t.getMessage());
+                            Toast.makeText(CadastroActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -164,9 +161,49 @@ public class CadastroActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.i("R", "Error GET LUXURY CAR: "+t.getMessage());
+                Toast.makeText(CadastroActivity.this,t.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
+    }
+
+    public void validarAPI(Usuario usuario){
+        if(usuario.getUsername() != null){
+            editUsuarioLogin.setError("Usuario já existe");
+        }
+        if(usuario.getEmail() != null){
+            editEmail.setError("Email invalido");
+        }
+    }
+
+    public boolean validarCampos(Usuario usuario, String senhaConfirmar){
+        String msg = "Campo vazio";
+        boolean result = true;
+        if(!usuario.getPassword().equals(senhaConfirmar)){
+            editUsuarioSenha.setError("Senha não confere");
+            editUsuarioSenhaConfirmar.setError("Senha não confere");
+            result = false;
+
+        }
+        if(usuario.getPassword().equals("")){
+            editUsuarioSenha.setError(msg);
+            result = false;
+        }
+        if(usuario.getUsername().equals("")){
+            editUsuarioLogin.setError(msg);
+            result = false;
+        }
+        if(usuario.getEmail().equals("")){
+            editEmail.setError(msg);
+            result = false;
+        }
+
+        if(senhaConfirmar.equals("")){
+            editUsuarioSenhaConfirmar.setError(msg);
+            result = false;
+        }
+        return result;
+
     }
 
 

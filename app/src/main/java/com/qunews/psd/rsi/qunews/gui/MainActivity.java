@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.qunews.psd.rsi.qunews.ClientAPI.ConnectiontoAPI;
 import com.qunews.psd.rsi.qunews.ClientAPI.QunewsAPI;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.i("R", "Error GET Noticia: "+t.getMessage());
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

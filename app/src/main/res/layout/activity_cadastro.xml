@@ -11,15 +11,14 @@
         android:orientation="vertical" >
 
         <EditText
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome"
             android:singleLine="true"
-            android:layout_marginTop="40dp"
             android:textColorHint="#000080"
             android:background="@drawable/barra_de_texto"
-            android:id="@+id/edtNomePessoa"/>
+            android:id="@+id/edtLoginCadastro"
+            android:layout_marginTop="20dp"
+            android:hint="Login"/>
 
         <LinearLayout android:orientation="horizontal"
             android:layout_width="wrap_content"
@@ -49,18 +48,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edtNomePessoa"
-            android:singleLine="true"
-            android:textColorHint="#000080"
-            android:background="@drawable/barra_de_texto"
-            android:id="@+id/edtLoginCadastro"
-            android:layout_marginTop="20dp"
-            android:hint="Login"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/edtNomePessoa"
+            android:layout_below="@id/planets_spinner"
             android:singleLine="true"
             android:textColorHint="#000080"
             android:background="@drawable/barra_de_texto"
