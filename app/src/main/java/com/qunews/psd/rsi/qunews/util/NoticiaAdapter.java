@@ -24,7 +24,7 @@ public class NoticiaAdapter extends RecyclerView.Adapter<NoticiaAdapter.MyViewHo
 
     private Context mContext;
     private List<Noticia> noticiaList;
-    String url = "http://10.0.3.2:8000/qunew/Images/";
+    String url = "http://192.168.0.104:8000/qunew/Images/";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView titulo, conteudo;

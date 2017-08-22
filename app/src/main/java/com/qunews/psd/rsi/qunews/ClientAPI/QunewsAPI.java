@@ -11,6 +11,7 @@ import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Path;
 
@@ -24,7 +25,7 @@ public interface QunewsAPI {
     Call<List<Tipo>> getTipo(@Path("ctrlCar") String ctrl);
 
     @GET("{ctrlCar}")
-    Call<List<Noticia>> getNoticia(@Path("ctrlCar") String ctrl);
+    Call<List<Noticia>> getNoticia(@Header("Authorization") String strtoken, @Path("ctrlCar") String ctrl);
 
 
 

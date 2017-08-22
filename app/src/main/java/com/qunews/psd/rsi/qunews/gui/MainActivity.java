@@ -1,11 +1,15 @@
 package com.qunews.psd.rsi.qunews.gui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.qunews.psd.rsi.qunews.ClientAPI.ConnectiontoAPI;
@@ -49,17 +53,39 @@ public class MainActivity extends AppCompatActivity {
 
         noticiaList = new ArrayList<>();
         adapter = new NoticiaAdapter(this, noticiaList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(adapter);
-
 
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+
+            case R.id.item_sair:
+                Toast.makeText(MainActivity.this, "Saindo", Toast.LENGTH_SHORT).show();
+                Intent intentGoLogin = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intentGoLogin);
+                ((MainActivity)contexto).finish();
+                System.exit(0);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+
+    }
+
+
     public void retornaNoticia(){
 
-        Call<List<Noticia>> call = qunewAPI.getNoticia("noticia");
+        Call<List<Noticia>> call = qunewAPI.getNoticia(usuario.getToken(),"noticia-list");
         call.enqueue(new Callback<List<Noticia>>() {
             @Override
             public void onResponse(Response<List<Noticia>> response, Retrofit retrofit) {
@@ -67,6 +93,9 @@ public class MainActivity extends AppCompatActivity {
                 for(Noticia noti: n){
                     noticiaList.add(noti);
                 }
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(contexto, LinearLayoutManager.VERTICAL, false);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setAdapter(adapter);
 
 
             }

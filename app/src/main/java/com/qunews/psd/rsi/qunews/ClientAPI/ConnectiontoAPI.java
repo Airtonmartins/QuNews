@@ -11,7 +11,7 @@ import retrofit.Retrofit;
 
 public class ConnectiontoAPI {
 
-    public static final String API = "http://10.0.3.2:8000/";
+    public static final String API = "http://192.168.0.104:8000/";
 
     public QunewsAPI CreateRetrofit(){
 
